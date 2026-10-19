@@ -1,3 +1,6 @@
+import requests
+import pandas as pd
+
 def fetch_nvd_data():
     print("Wellcome to NVD Data Collection")
     verify = "n"
@@ -19,6 +22,29 @@ def fetch_nvd_data():
         if verify == 'q':
             print("Quiting NVD Data Collection")
             return
+
+    # NVD API Request Setup
+    search_keyword = f"{dbmsName} {versionNumber}"
+    url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+    params = {"keywordSearch": search_keyword, "resultsPerPage": 50}
+
+    print( f"Fetching data for {search_keyword} from NVD API...")
+
+    # Try to fetch nvd data, graceful response to errors
+    try:
+        response = requests.get(url, params=params, timeout=15)
+        
+        if response.status_code == 429:
+            print("Error: NVD API rate limit reached (HTTP 429). Please try again later.")
+            return
+        elif response.status_code != 200:
+            print(f"Error: API returned status code {response.status_code}")
+            return
+
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Network error: {e}")
+        return
 
 
 #1 write a function that takes a DBMS name and version
