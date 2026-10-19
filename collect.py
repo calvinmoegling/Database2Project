@@ -90,7 +90,7 @@ def fetch_nvd_data():
     df = pd.DataFrame(records)
     
     # export to CSV
-    filename = f"csv_files/{dbmsName}_{versionNumber}_cvss.csv".replace(" ", "_")
+    filename = f"csv_files/{dbmsName}_{versionNumber}.csv".replace(" ", "_")
     
     df.to_csv(filename, index=False)
     print(f"Successfully saved {len(records)} records to {filename}!")
