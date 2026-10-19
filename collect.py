@@ -1,11 +1,24 @@
 def fetch_nvd_data():
     print("Wellcome to NVD Data Collection")
-    dbms = ""
-    while not(dbms == 'test' or dbms == 'q'): # This checks to make sure the inputed cpe name is in the proper format or it will repeat
-        dbms = input("Enter CPE Name (add more detail) or 'q' to exit: ").strip().lower()
-    if(dbms == 'q'):
-        print("Quiting NVD Data Collection")
-        return
+    verify = "n"
+    while verify == "n":
+        dbmsName = ""
+        versionNumber = ""
+        print("Input 'q' to Quit")
+        while not dbmsName: # Checks to make sure a name was entered
+            dbmsName = input("Enter DBMS Name ('MongoDB' or 'Cassandra'): ").strip().lower()
+            if dbmsName == 'q':
+                print("Quiting NVD Data Collection")
+                return
+        while not versionNumber: # Checks to make sure a number was entered
+            versionNumber = input("Enter Version Number (e.g., 5.0, 4.0): ").strip().lower()
+            if versionNumber == 'q':
+                print("Quiting NVD Data Collection")
+                return
+        verify = input(f"Is '{dbmsName} {versionNumber}' Correct\ny for Yes n for No: ").strip().lower()
+        if verify == 'q':
+            print("Quiting NVD Data Collection")
+            return
 
 
 #1 write a function that takes a DBMS name and version
