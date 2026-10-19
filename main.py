@@ -1,3 +1,6 @@
+import collect
+collect.fetch_nvd_data()
+
 # 1 show a menu:
 # - option 1 - NVD Data Collection
 # - option 2 - Vulnerability Analysis

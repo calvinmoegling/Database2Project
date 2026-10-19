@@ -1,3 +1,6 @@
+def fetch_nvd_data():
+    print("collect test")
+
 #1 write a function that takes a DBMS name and version
 #asks the NVD API for its CVEs (use the requests library)
 # NVD API docs: https://nvd.nist.gov/developers/vulnerabilities
@@ -9,4 +12,4 @@
 #4 save the result as a CSV in the csv_files folder
 #name it like  mongodb_4.4.csv
 
-#5if the API fails, print a message instead of crashing
+# 5 if the API fails, print a message instead of crashing
