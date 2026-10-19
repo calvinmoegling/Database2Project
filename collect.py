@@ -1,9 +1,9 @@
 def fetch_nvd_data():
     print("Wellcome to NVD Data Collection")
-    cpeInputedName = ""
-    while not(cpeInputedName == 'test' or cpeInputedName == 'q'): # This checks to make sure the inputed cpe name is in the proper format or it will repeat
-        cpeInputedName = input("Enter CPE Name (add more detail) or 'q' to exit: ").lower()
-    if(cpeInputedName == 'q'):
+    dbms = ""
+    while not(dbms == 'test' or dbms == 'q'): # This checks to make sure the inputed cpe name is in the proper format or it will repeat
+        dbms = input("Enter CPE Name (add more detail) or 'q' to exit: ").strip().lower()
+    if(dbms == 'q'):
         print("Quiting NVD Data Collection")
         return
 
