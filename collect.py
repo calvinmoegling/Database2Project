@@ -1,5 +1,12 @@
 def fetch_nvd_data():
-    print("collect test")
+    print("Wellcome to NVD Data Collection")
+    cpeInputedName = ""
+    while not(cpeInputedName == 'test' or cpeInputedName == 'q'): # This checks to make sure the inputed cpe name is in the proper format or it will repeat
+        cpeInputedName = input("Enter CPE Name (add more detail) or 'q' to exit: ").lower()
+    if(cpeInputedName == 'q'):
+        print("Quiting NVD Data Collection")
+        return
+
 
 #1 write a function that takes a DBMS name and version
 #asks the NVD API for its CVEs (use the requests library)
