@@ -86,16 +86,11 @@ def fetch_nvd_data():
             "CVSS_Score": cvss_score,
             "Date_Collected": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         })
-
-#1 write a function that takes a DBMS name and version
-#asks the NVD API for its CVEs (use the requests library)
-# NVD API docs: https://nvd.nist.gov/developers/vulnerabilities
-
-#2 for each CVE, keep only the CVE ID and the CVSS score
-
-#3 if a score is missing or not a number, use 5
-
-#4 save the result as a CSV in the csv_files folder
-#name it like  mongodb_4.4.csv
-
-# 5 if the API fails, print a message instead of crashing
+    # Convert to Pandas DataFrame 
+    df = pd.DataFrame(records)
+    
+    # export to CSV
+    filename = f"csv_files/{dbmsName}_{versionNumber}_cvss.csv".replace(" ", "_")
+    
+    df.to_csv(filename, index=False)
+    print(f"Successfully saved {len(records)} records to {filename}!")
