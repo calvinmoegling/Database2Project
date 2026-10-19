@@ -1,5 +1,7 @@
 import requests
 import pandas as pd
+import os
+from datetime import datetime
 
 def fetch_nvd_data():
     print("Wellcome to NVD Data Collection")
@@ -28,12 +30,12 @@ def fetch_nvd_data():
     url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
     params = {"keywordSearch": search_keyword, "resultsPerPage": 50}
 
-    print( f"Fetching data for {search_keyword} from NVD API...")
+    print( f"\nFetching data for {search_keyword} from NVD API...\n")
 
     # Try to fetch nvd data, graceful response to errors
     try:
         response = requests.get(url, params=params, timeout=15)
-        
+
         if response.status_code == 429:
             print("Error: NVD API rate limit reached (HTTP 429). Please try again later.")
             return
@@ -45,7 +47,45 @@ def fetch_nvd_data():
     except requests.exceptions.RequestException as e:
         print(f"Network error: {e}")
         return
+    
+    # Extract vulnerabilities
+    vulnerabilities = data.get("vulnerabilities", [])
+    
+    if not vulnerabilities:
+        print(f"No CVE records found for '{search_keyword}'.")
+        return
 
+    records = []
+
+    # Process vulnerabilities into CVSS Scores
+    for item in vulnerabilities:
+        cve_data = item.get("cve", {})
+        cve_id = cve_data.get("id", "UNKNOWN")
+
+        # Extract CVSS Score, checking v3.1, v3.0, or v2 metrics
+        cvss_score = None
+        metrics = cve_data.get("metrics", {})
+
+        for metric_key in ["cvssMetricV31", "cvssMetricV30", "cvssMetricV2"]:
+            if metric_key in metrics:
+                try:
+                    cvss_score = metrics[metric_key][0]["cvssData"]["baseScore"]
+                    break
+                except (KeyError, IndexError, TypeError):
+                    continue
+        
+        # If CVSS is missing set it to 5
+        if cvss_score is None:
+            cvss_score = 5.0
+
+        # Store record
+        records.append({
+            "DBMS": dbmsName,
+            "Version": versionNumber,
+            "CVE_ID": cve_id,
+            "CVSS_Score": cvss_score,
+            "Date_Collected": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
 
 #1 write a function that takes a DBMS name and version
 #asks the NVD API for its CVEs (use the requests library)
