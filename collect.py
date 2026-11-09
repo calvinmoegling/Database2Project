@@ -94,3 +94,4 @@ def fetch_nvd_data():
     
     df.to_csv(filename, index=False)
     print(f"Successfully saved {len(records)} records to {filename}!")
+    return filename
