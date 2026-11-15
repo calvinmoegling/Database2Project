@@ -1,5 +1,5 @@
 requests
 pandas
-
-
+mysql-connector-python
+customtkinter
 # pip install -r requirements.txt

@@ -31,7 +31,7 @@ def get_csv_info(files_selected): # files_selected is a list of file names
     for file in files_selected:
 
         # Read each file into a temporary dataframe
-        filepath = "/csv_files/" + file
+        filepath = "csv_files/" + file
         try:
             temp_df = pd.read_csv(filepath)
         except:
@@ -41,7 +41,7 @@ def get_csv_info(files_selected): # files_selected is a list of file names
         # Calculate the current file's Average, Max, and Critical Count
         average = temp_df.loc[:, 'CVSS_Score'].mean()
         max = temp_df.loc[:, 'CVSS_Score'].max()
-        critical_count = temp_df[temp_df['CVSS_Score'] >= 9.0].count()
+        critical_count = (temp_df['CVSS_Score'] >= 9.0).sum()
 
         #3 calculate the Risk Score using the formula in the SRS
         risk_score = (0.5 * average) + (0.3 * max) + (0.2 * critical_count)
