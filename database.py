@@ -179,6 +179,7 @@ def get_cves(connection, dbms_name, version):
 # If the password is entered correctly, the connection passes and the tables are created.
 # Otherwise, they are denied access.
 if __name__ == "__main__":
+    from collect import fetch_nvd_data
     connection = None
 
     try:
@@ -186,7 +187,10 @@ if __name__ == "__main__":
         connection = connect_to_database(password)
         print("Connection successful!")
         create_tables(connection)
-        # This part is not finished, requires the path selection functionality to work.
+        csv_path = fetch_nvd_data()
+
+        if csv_path is not None:
+            import_csv(connection, csv_path)
 
     except (mysql.connector.Error, ValueError, OSError) as error:
         print(f"Database connection error: {error}")
