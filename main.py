@@ -97,14 +97,16 @@ def connect_db():
     connect_box.delete("1.0", "end")
     try:
         if conn is None:
-            conn = database.connect_to_database()
+            conn = database.connect_to_database(pw_entry.get())
             connect_box.insert("end", "Connection successful!\n")
             database.create_tables(conn)
             connect_box.insert("end", "Database tables have successfully been created and setup!\n")
         else:
             connect_box.insert("end", "Already connected.\n")
-        say(f"Connected to {database.DB_FILE}.", ok=True)
+        say("Connected to the database.", ok=True)
     except Exception as e:
+        if conn is not None:
+            conn.close()
         conn = None
         connect_box.insert("end", f"Database connection error: {e}\n")
         say(f"Error: {e}")
@@ -128,7 +130,27 @@ def add_to_database():
 
 def show_database():
     show(db_view)
-
+    if conn is None:
+        say("Error: connect to the database first.")
+        return
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT d.DB_Name, d.DB_Version, c.CVE_ID, c.CVSS
+            FROM `Database` d
+            JOIN `Record` r ON d.DB_ID = r.DB_ID
+            JOIN `CVE` c ON r.CVE_ID = c.CVE_ID
+            ORDER BY d.DB_Name, d.DB_Version, c.CVSS DESC
+        """)
+        rows = cursor.fetchall()
+        cursor.close()
+    except Exception as e:
+        say(f"Error: {e}")
+        return
+    df = pd.DataFrame(rows, columns=["DBMS", "Version", "CVE_ID", "CVSS"])
+    db_box.delete("1.0", "end")
+    db_box.insert("1.0", df.to_string(index=False) if rows else "Database is empty.")
+    say(f"{len(rows)} record(s) in the database.", ok=True)
 
 
 app = ctk.CTk()
@@ -186,7 +208,11 @@ ctk.CTkButton(buttons, text="Add to Database", command=add_to_database).pack(sid
 # Option 3
 connect_box = ctk.CTkTextbox(connect_view, font=("Courier", 13))
 connect_box.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-ctk.CTkButton(connect_view, text="Connect", command=connect_db).grid(row=1, column=0, sticky="w", pady=10, padx=10)
+bar = ctk.CTkFrame(connect_view, fg_color="transparent")
+bar.grid(row=1, column=0, sticky="w", pady=10, padx=10)
+pw_entry = ctk.CTkEntry(bar, show="*", width=200, placeholder_text="MySQL root password")
+pw_entry.pack(side="left", padx=(0, 10))
+ctk.CTkButton(bar, text="Connect", command=connect_db).pack(side="left")
 
 # Option 4
 db_box = ctk.CTkTextbox(db_view, font=("Courier", 13), wrap="none")
