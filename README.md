@@ -5,7 +5,7 @@ A Python desktop application built with CustomTkinter that collects Common Vulne
 * Operating System: Windows 11 (verified)
 * Python: Python 3.10+
 * Database: MySQL Community Server (running locally on default port'3306')
-*   Download: https://dev.mysql.com/downloads/installer/
+  *   Download: https://dev.mysql.com/downloads/installer/
 
 # How to Start the Program:
 1. Download the GitHub repository ZIP file and extract it
