@@ -2,10 +2,10 @@
 A Python desktop application built with CustomTkinter that collects Common Vulnerabilities and Exposures (CVE) data from the NVD API v2.0 and calculates comparative risk scores.
 
 # System Requirements:
-Operating System: Windows 11 (verified)
-Python: Python 3.10+
-Database: MySQL Community Server (running locally on default port'3306')
-  Download: https://dev.mysql.com/downloads/installer/
+* Operating System: Windows 11 (verified)
+* Python: Python 3.10+
+* Database: MySQL Community Server (running locally on default port'3306')
+*   Download: https://dev.mysql.com/downloads/installer/
 
 # How to Start the Program:
 1. Download the GitHub repository ZIP file and extract it
